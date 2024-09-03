@@ -1179,11 +1179,19 @@ input[type="file"] {
 
 /* where in map css */
 
+#map-wrapper {
+    width: 100%;
+    border-radius:10px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #map {
     height: 80vh;
-    width: 90%; /* Reduced from 100% to 80% */
-    max-width: 1200px; /* Added max-width to prevent it from becoming too wide on large screens */
-    margin: 0 auto; /* Center the map if it's not full width */
+    width: 90%;
+    max-width: 1200px;
     display: none;
 }
 
@@ -1482,7 +1490,10 @@ input[type="file"] {
 
     </div>
     
-    <div id="map"></div>
+    <div id="map-wrapper">
+        <div id="map"></div>
+    </div>
+
     
 
     <footer class="retro-border">
@@ -1560,18 +1571,19 @@ function initializeApp() {
 
 function toggleMap() {
     const mapDiv = document.getElementById('map');
-    if (mapDiv.style.display === 'none') {
+    if (mapDiv.style.display === 'none' || mapDiv.style.display === '') {
         mapDiv.style.display = 'block';
         if (!map) {
             initMap();
         }
-        updateMapData(); // Ensure this is called
+        updateMapData();
         console.log("Map toggled on");
     } else {
         mapDiv.style.display = 'none';
         console.log("Map toggled off");
     }
 }
+
 
 
 function initMap() {
@@ -1624,6 +1636,8 @@ function initMap() {
             blockRectangles[blockNumber] = rectangle;
         }
     }
+
+    updateMapData();
 }
 
 function updateMapData() {
@@ -1645,7 +1659,18 @@ function updateMapData() {
         });
     });
     console.log("Block users after update:", blockUsers);
+
+    // Update block colors based on assigned users
+    for (let i = 1; i <= Object.keys(blockRectangles).length; i++) {
+        const rectangle = blockRectangles[i];
+        if (blockUsers[i] && blockUsers[i].length > 0) {
+            rectangle.setStyle({ color: "#00FF00", fillOpacity: 0.3 });
+        } else {
+            rectangle.setStyle({ color: "#FF0000", fillOpacity: 0.1 });
+        }
+    }
 }
+
 
 
 function displayBlockUsers(blockNumber) {
