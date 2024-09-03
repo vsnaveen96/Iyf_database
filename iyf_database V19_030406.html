@@ -1,0 +1,3180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IYF Jaipur Database</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        :root {
+    --primary-color: #FF6B6B;
+    --secondary-color: #4ECDC4;
+    --background-color: #F7F7F2;
+    --text-color: #4A4A4A;
+    --light-text: #FFFFFF;
+    --light-text: #FFFFFF;
+    --border-color: #FFD93D;
+    --hover-color: #cefad4;
+    --details-bg: #FFF4E0;
+    --accent-color: #FFD93D;
+}
+
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.4;
+    min-height: 100vh;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 2.2em;
+    letter-spacing: -0.5px;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+th, td {
+    padding: 8px 12px;
+    text-align: center; /* Center align the text */
+    vertical-align: middle; /* Vertically center the content */
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.85em;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.75em;
+    letter-spacing: 0.5px;
+}
+
+tr:hover {
+    background-color: var(--hover-color);
+    transition: background-color 0.3s ease;
+}
+
+.controls {
+    margin-top: 25px;
+}
+
+.input-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+input[type="text"], 
+input[type="email"], 
+input[type="file"], 
+input[type="number"], 
+input[type="date"], 
+input[type="tel"], /* Add this line for mobile number input */
+textarea,
+select.form-input {
+    padding: 8px 10px;
+    font-size: 13px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    flex-grow: 1;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #ffffff; /* Add this to ensure consistent background */
+    color: var(--text-color); /* Add this to ensure consistent text color */
+    font-family: 'Roboto', sans-serif; /* Add this to ensure consistent font */
+}
+
+input[type="text"]:focus, 
+input[type="email"]:focus, 
+input[type="file"]:focus,
+input[type="number"]:focus, 
+input[type="date"]:focus, 
+input[type="tel"]:focus, /* Add this line for mobile number input */
+textarea:focus,
+select.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.1);
+}
+
+/* Style for the dropdown arrow */
+select.form-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%234A4A4A' viewBox='0 0 12 12'%3E%3Cpath d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px; /* Make room for the dropdown arrow */
+}
+
+/* Remove default arrow in IE */
+select.form-input::-ms-expand {
+    display: none;
+}
+
+/* Hover effect */
+input[type="text"]:hover, 
+input[type="email"]:hover, 
+input[type="file"]:hover,
+input[type="number"]:hover, 
+input[type="date"]:hover, 
+input[type="tel"]:hover, /* Add this line for mobile number input */
+textarea:hover,
+select.form-input:hover {
+    border-color: var(--primary-color);
+}
+
+
+.btn-add, .btn-toggle-form, .btn-toggle-filter {
+    background-color: var(--primary-color);
+    border: none;
+    color: #ffffff;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-add:hover, .btn-toggle-form:hover {
+    background-color: #FF8E8E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.search-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+#searchInput {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.1);
+}
+
+.details-row {
+    display: none;
+    transition: all 0.3s ease;
+}
+
+.details-row td {
+    padding: 10px;
+    background-color: var(--details-bg);
+    font-size: 0.8em;
+}
+
+.details-content {
+    display: flex;
+    flex-wrap: wrap; /* Allow content to wrap on smaller screens */
+    gap: 15px;
+    align-items: flex-start;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    width: 100%; /* Ensure it takes full width of its container */
+    max-width: 100%; /* Remove the fixed max-width */
+    margin: 0 auto;
+    padding: 10px;
+}
+
+
+.details-image {
+    flex: 0 0 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.details-info {
+    flex: 1;
+    padding: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust minimum width */
+    gap: 8px;
+}
+
+
+.details-row .profile-pic-large {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.details-info p {
+    margin: 0;
+    padding: 4px;
+    background-color: #f9f9f9;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    font-size: 0.75em;
+    transition: all 0.3s ease;
+}
+
+.details-info p:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.details-info strong {
+    font-weight: 500;
+    color: var(--primary-color);
+    margin-right: 4px;
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
+.action-icons {
+    display: flex;
+    gap: 6px;
+    justify-content: center; /* Center the action icons */
+}
+
+.action-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 4px;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.action-icon:hover {
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+.icon-toggle, .icon-edit, .icon-delete, .icon-followup, .edit-task, .delete-task { color: var(--primary-color); }
+
+.profile-pic {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto; /* Center the profile picture */
+}
+
+.truncate {
+    max-width: none;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    position: relative;
+    margin: 0 auto;
+    word-break: break-word;
+}
+
+/* Remove the hover effect */
+.truncate:hover::after {
+    display: none;
+}
+
+
+#addForm {
+    display: none;
+    background-color: var(--details-bg);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+#addForm.show {
+    display: block;
+}
+
+.rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.stars {
+    display: inline-block;
+    font-size: 1em;
+    color: #FFD700;
+}
+
+.star {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star:hover,
+.star.active {
+    color: #FFA500;
+}
+
+@media (min-width: 1024px) {
+    .details-content {
+        max-width: 100%; /* Allow it to take full width on larger screens */
+        padding: 20px;
+    }
+
+    .details-row .profile-pic-large {
+        width: 120px;
+        height: 120px;
+    }
+
+    .details-image {
+        flex: 0 0 120px;
+    }
+
+    .details-info {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+    }
+
+    .details-info p {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    th, td {
+        padding: 6px;
+        font-size: 0.75em;
+    }
+
+    .action-icons {
+        flex-direction: row;
+        justify-content: center; /* Center the action icons */
+    }
+
+    .action-icon {
+        padding: 6px;
+    }
+
+    .details-image {
+        flex: 0 0 80px;
+    }
+
+    .details-info {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+    .stars {
+        font-size: 0.9em;
+    }
+}
+
+
+/* Header Styles */
+.retro-border {
+    border: 15px solid transparent;
+    border-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><path d="M0 20 L20 0 L40 20 L20 40 Z" fill="none" stroke="%23FFD93D" stroke-width="2"/></svg>') 30% round;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    padding: 0.5rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 25%),
+        radial-gradient(circle at 80% 50%, rgba(255,255,255,0.1) 0%, transparent 25%);
+    opacity: 0.3;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.notification-icon {
+    position: relative;
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    position: relative;
+}
+
+.notification-icon i {
+    font-size: inherit;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 12px;
+    min-width: 18px;
+    text-align: center;
+}
+
+
+.notification-icon:hover {
+    color: var(--accent-color);
+}
+
+.header-content {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+    display: inline-block;
+    margin: 0;
+}
+
+.logo::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background-color: var(--accent-color);
+}
+
+.tagline {
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-top: 1rem;
+    font-style: italic;
+    position: relative;
+}
+
+
+/* Footer Styles */
+footer {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    text-align: center;
+    padding: 0.5rem 0;
+    margin-top: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 25%),
+        radial-gradient(circle at 80% 50%, rgba(255,255,255,0.1) 0%, transparent 25%);
+    opacity: 0.3;
+}
+
+.social-icons {
+    margin-top: 1.5rem;
+}
+
+.social-icons a {
+    color: var(--light-text);
+    font-size: 1.5rem;
+    margin: 0 15px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.social-icons a:hover {
+    color: var(--accent-color);
+    transform: translateY(-3px);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .notification-icon, .logout-button {
+        position: absolute;
+        top: 10px;
+    }
+
+    .notification-icon {
+        left: 10px;
+    }
+
+
+
+    .header-content {
+        margin: 20px 0 10px;
+    }
+
+    .logo {
+        font-size: 2.5rem;
+    }
+
+    .tagline {
+        font-size: 1rem;
+    }
+
+    .social-icons a {
+        font-size: 1.75rem;
+        margin: 0 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 2rem;
+    }
+
+    .tagline {
+        font-size: 0.9rem;
+    }
+
+
+
+    .social-icons a {
+        font-size: 1.5rem;
+        margin: 0 6px;
+    }
+}
+
+
+#dobInput {
+    padding: 8px 10px;
+    font-size: 13px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#dobInput:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.1);
+}
+
+#dobInput.has-date {
+    color: var(--text-color);
+}
+
+/* Style for mobile date input */
+@supports (-webkit-touch-callout: none) {
+    #dobInput {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    
+    #dobInput::-webkit-date-and-time-value {
+        text-align: left;
+    }
+}
+
+/* Hide native picker icon on Webkit browsers */
+#dobInput::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+.editable {
+    padding: 2px 5px;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+
+.editable:focus {
+    outline: none;
+    background-color: #e0e0e0;
+}
+
+.btn-toggle-filter {
+    margin-left: 10px;
+}
+
+#filterForm {
+    background-color: var(--details-bg);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+#bulkActionForm {
+    background-color: var(--details-bg);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.btn-apply-filter, .btn-clear-filter, .btn-apply-bulk, .btn-delete-bulk, .btn-add-task{
+    background-color: var(--primary-color);
+    border: none;
+    color: #ffffff;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btn-clear-filter {
+    background-color: var(--secondary-color);
+}
+
+
+/* Pagination related CSS */
+
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#entriesPerPage {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+#pageButtons {
+    display: flex;
+    gap: 5px;
+}
+
+.page-button {
+    padding: 5px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.page-button:hover, .page-button.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Pagination related CSS */
+
+
+/* image input css */
+
+
+input[type="file"] {
+    max-width: 100%;
+    font-size: 14px;
+    padding: 5px;
+}
+
+@media (max-width: 768px) {
+    input[type="file"] {
+        font-size: 12px;
+        padding: 3px;
+    }
+}
+
+.btn-change-photo {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.btn-change-photo:hover {
+    background-color: var(--secondary-color);
+}
+
+
+/* image input css */
+
+/* whatsapp icon css */
+
+.icon-whatsapp {
+    color: #25D366; /* WhatsApp brand color */
+    font-size: 1.1em; /* Increase size slightly */
+    text-shadow: 0 0 1px #25D366, 0 0 1px #25D366; /* Add text shadow for bold effect */
+    -webkit-text-stroke: 0.1px #25D366; /* Add stroke for webkit browsers */
+}
+
+.icon-whatsapp:hover {
+    opacity: 0.8;
+}
+
+/* whatsapp icon css */
+    
+    
+    /* Notification panel css */
+/* Notification panel css */
+.notification-panel {
+    display: none;
+    position: absolute;
+    top: 100%; /* Position it right below the icon */
+    right: 35px; /* Adjust this value */
+    left: 35px; /* Adjust this value */
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    padding: 15px;
+    font-family: 'Roboto', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.notification-panel h3 {
+    margin: 0 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    font-size: 1.2em;
+}
+
+.notification-item {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item:hover {
+    background-color: #f7f7f7;
+}
+
+.notification-text {
+    flex-grow: 1;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.notification-whatsapp {
+    color: #25D366;
+    font-size: 1.4em;
+    margin-left: 10px;
+    transition: transform 0.2s ease;
+}
+
+.notification-whatsapp:hover {
+    transform: scale(1.1);
+}
+
+/* Scrollbar styles for the notification panel */
+.notification-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notification-panel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.notification-panel::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.notification-panel::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+/* Animation for panel appearance */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notification-panel.show {
+    display: block;
+    animation: slideIn 0.3s ease;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .notification-panel {
+        position: fixed;
+        top: 60px; /* Adjust this value based on your header height */
+        right: 30px; /* Adjust this value */
+        left: 30px; /* Adjust this value */
+        width: calc(100% - 40px); /* Full width minus some padding */
+        max-width: 300px;
+    }
+}
+        /* Notification panel css */
+        
+/* Container for the buttons */
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Style for all buttons (only if needed to override any existing styles) */
+.btn-toggle-form, .btn-toggle-filter, .btn-toggle-bulk {
+    flex: 1 1 auto;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .button-container {
+        justify-content: space-between;
+    }
+
+    .btn-toggle-form, .btn-toggle-filter, .btn-toggle-bulk {
+        font-size: 0.9em;
+        padding: 8px 12px;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .btn-toggle-form, .btn-toggle-filter, .btn-toggle-bulk {
+        font-size: 0.8em;
+        padding: 6px 10px;
+    }
+}
+
+.btn-toggle-form.active-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text for better contrast */
+}
+
+/* task/followup form css */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#followUpForm {
+  display: flex;
+  flex-direction: column;
+}
+
+#followUpForm label {
+  margin-top: 10px;
+}
+
+#followUpForm textarea,
+#followUpForm input[type="date"] {
+  margin-bottom: 10px;
+}
+
+/* task/followup form css */
+
+/* task/followup table css */
+
+#followUpTasksContainer {
+    margin-top: 20px;
+}
+
+#toggleFollowUpTasks {
+    margin-bottom: 10px;
+}
+/* task/followup table css */
+
+.flatpickr-calendar {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.flatpickr-day.selected {
+    background: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.flatpickr-day.today {
+    border-color: #4CAF50;
+}
+
+.editable {
+    padding: 2px 5px;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+.editable:focus {
+    background-color: #f0f0f0;
+    outline: none;
+}
+
+.task-description {
+    max-width: 100px; /* Adjust this value as needed */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.truncated-text {
+    display: inline-block;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.custom-tooltip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    max-width: 300px;
+    word-wrap: break-word;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s;
+}
+
+.notification-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.delete-notification {
+    background: none;
+    border: none;
+    color: #ff4444;
+    cursor: pointer;
+}
+
+.delete-notification:hover {
+    color: #cc0000;
+}
+
+#notificationBadge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    display: none;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: stretch; /* This ensures all items stretch to match the tallest item */
+}
+
+.button-container .btn-toggle-form {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    height: 35px; /* Set a fixed height for all buttons */
+    box-sizing: border-box; /* Ensure padding is included in the height */
+}
+
+.btn-toggle-form {
+    background-color: var(--primary-color);
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide any overflowing content */
+    text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+}
+
+.btn-toggle-form i {
+    margin-right: 5px;
+    font-size: 16px; /* Ensure consistent icon size */
+}
+
+/* where in map css */
+
+#map {
+    height: 80vh;
+    width: 90%; /* Reduced from 100% to 80% */
+    max-width: 1200px; /* Added max-width to prevent it from becoming too wide on large screens */
+    margin: 0 auto; /* Center the map if it's not full width */
+    display: none;
+}
+
+.popup-content {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    max-width: 300px;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.popup-header h3 {
+    margin: 0;
+}
+
+.total-users {
+    font-weight: bold;
+}
+
+.popup-content h4 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.popup-content p {
+    margin: 5px 0;
+}
+
+.popup-content ul {
+    list-style: none;
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+.popup-content ul li {
+    margin-bottom: 10px;
+}
+
+.scrollable-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border-top: 1px solid #ccc;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.scrollable-list h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+        
+/* where in map css */
+
+    </style>
+</head>
+<body>
+
+    <div class="animated-bg">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <header class="retro-border">
+        <div class="header-container">
+    <div class="notification-icon" onclick="toggleNotificationPanel()">
+        <i class="material-icons">notifications</i>
+        <span class="notification-badge" id="notificationBadge" style="display: none;"></span>
+    </div>
+    <div class="header-content">
+        <h1 class="logo">IYF Jaipur</h1>
+        <p class="tagline">Inspiring Youth for a Better Future</p>
+    </div>
+</div>
+
+    </header>
+    
+    <!-- Add this right after the header -->
+<div id="notificationPanel" class="notification-panel">
+    <h3>Notifications</h3>
+    <div id="notificationList"></div>
+</div>
+
+    <div class="container">
+        <h1 style="color: #FF6B6B;">IYF Jaipur Database</h1>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchTable()">
+        </div>
+
+        <div class="button-container" id="buttonContainer">
+    <button class="btn-toggle-form" onclick="toggleAddForm()">
+        <i class="fas fa-plus"></i> <span>Add New Entry</span>
+    </button>
+    
+    <button class="btn-toggle-form btn-toggle-filter" onclick="toggleFilterForm()">
+        <i class="fas fa-filter"></i> <span>Filter Data</span>
+    </button>
+    
+    <button class="btn-toggle-form btn-toggle-bulk" onclick="toggleBulkActionForm()">
+    <i class="fas fa-tasks"></i> <span>Bulk Actions</span>
+</button>
+
+</div>
+        
+        
+        <div id="filterForm" style="display: none;">
+          <h3 style="padding-bottom: 10px;">Filter Data</h3>
+    <div class="input-group">
+        <select id="filterGroup" class="form-input">
+            <option value="">Select Group</option>
+        </select>
+        <select id="filterChanting" class="form-input">
+            <option value="">Select Chanting</option>
+        </select>
+        <select id="filterCity" class="form-input">
+            <option value="">Select City</option>
+        </select>
+        <select id="filterBlockNo" class="form-input">
+            <option value="">Select Block Number</option>
+        </select>
+        <input type="number" id="filterAgeFrom" placeholder="Age From">
+        <input type="number" id="filterAgeTo" placeholder="Age To">
+        <select id="filterServices" class="form-input">
+            <option value="">Select Service</option>
+        </select>
+        <select id="filterPOP" class="form-input">
+            <option value="">Select Place of Preaching</option>
+            <option value="College">College</option>
+            <option value="Campus">Campus</option>
+        </select>
+        <input type="text" id="filterFacilitator" list="filterFacilitatorList" placeholder="Facilitator">
+        <datalist id="filterFacilitatorList">
+            <!-- This will be populated dynamically -->
+        </datalist>
+    </div>
+    <button class="btn-apply-filter" onclick="applyFilter()">Apply Filter</button>
+    <button class="btn-clear-filter" onclick="clearFilter()">Clear Filter</button>
+</div>
+
+        
+        
+        <div id="bulkActionForm" style="display: none;">
+    <h3 style="padding-bottom: 10px;">Bulk Actions</h3>
+    <div class="input-group">
+        <select id="bulkActionGroup" class="form-input">
+            <option value="">Change Group</option>
+            <option value="Bhisma">Bhisma</option>
+            <option value="Bhima">Bhima</option>
+            <option value="Arjun">Arjun</option>
+            <option value="Yudhisthira">Yudhisthira</option>
+            <option value="Nakul">Nakul</option>
+            <option value="Sahdev">Sahdev</option>
+            <option value="Nachiketa">Nachiketa</option>
+            <option value="Well Wisher">Well Wisher</option>
+        </select>
+        <input type="text" id="bulkActionBlockNo" placeholder="Change Block No">
+        <input type="text" id="bulkActionChanting" placeholder="Change Chanting">
+        <input type="text" id="bulkActionService" placeholder="Change Service">
+        <select id="bulkActionPOP" class="form-input">
+            <option value="">Change Place of Preaching</option>
+            <option value="College">College</option>
+            <option value="Campus">Campus</option>
+        </select>
+        <input type="text" id="bulkActionFacilitator" list="facilitatorList" placeholder="Change Facilitator">
+        <datalist id="facilitatorList">
+            <!-- This will be populated dynamically -->
+        </datalist>
+        <button class="btn-apply-bulk" onclick="applyBulkActions()">Apply Bulk Actions</button>
+        <button class="btn-delete-bulk" onclick="deleteBulkRows()">Delete Selected Rows</button>
+    </div>
+</div>
+
+
+
+        <div id="addForm" style="display: none;">
+          <h3 style="padding-bottom: 10px;">Add New Data</h3>
+            <div class="input-group">
+                <input type="text" id="nameInput" placeholder="Enter name">
+                <select id="groupInput" class="form-input">
+                    <option value="">Select Group</option>
+                    <option value="Bhisma">Bhisma</option>
+                    <option value="Bhima">Bhima</option>
+                    <option value="Arjun">Arjun</option>
+                    <option value="Yudhisthira">Yudhisthira</option>
+                    <option value="Nakul">Nakul</option>
+                    <option value="Sahdev">Sahdev</option>
+                    <option value="Nachiketa">Nachiketa</option>
+                    <option value="Well Wisher">Well Wisher</option>
+                </select>
+                <input type="tel" id="mobileInput" placeholder="Mobile number">
+                <input type="email" id="emailInput" placeholder="Enter email">
+                
+                
+                <select id="popInput" class="form-input" required>
+                    <option value="">Select Place of Preaching</option>
+                    <option value="College">College</option>
+                    <option value="Campus">Campus</option>
+                </select>
+                <input type="text" id="facilitatorInput" list="facilitatorList" placeholder="Facilitator" required>
+                    <datalist id="facilitatorList">
+                    <!-- This will be populated dynamically -->
+                    </datalist>
+                <input type="text" id="chantingInput" placeholder="Chanting">
+                <input type="text" id="educationInput" placeholder="Education">
+                <input type="text" id="addressInput" placeholder="Address">
+                <input type="text" id="cityInput" placeholder="City">
+                <input type="text" id="blockNoInput" placeholder="Block No">
+                <input type="number" id="ageInput" placeholder="Age">
+                <input type="text" id="servicesInput" placeholder="Services">
+                <input type="text" id="dobInput" placeholder="Date of Birth">
+                <textarea id="aboutInput" placeholder="About"></textarea>
+                <input type="file" id="profilePicInput" accept="image/*">
+            </div>
+            <button class="btn-add" onclick="addRow()"><i class="fas fa-plus"></i> Add Row</button>
+        </div>
+        
+
+        <div class="table-responsive">
+            <table id="dataTable">
+                <thead>
+                  <tr>
+                      <th><input type="checkbox" id="masterCheckbox" onclick="toggleAllCheckboxes()"></th>
+                      <th>S No</th>
+                      <th>Pic</th>
+                      <th>Name</th>
+                      <th>Group</th>
+                      <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <!-- Table data will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-controls">
+            <select id="entriesPerPage">
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="75">75</option>
+                <option value="100">100</option>
+                <option value="all">All</option>
+            </select>
+            <div id="pageButtons"></div>
+        </div>
+        
+        
+        <div id="followUpModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Add Follow-up Task</h2>
+    <form id="followUpForm">
+      <label for="taskDescription">Task Description:</label>
+      <textarea id="taskDescription" required></textarea>
+      <label for="taskDueDate">Due Date:</label>
+      <input type="date" id="taskDueDate" required>
+      <button class="btn-add-task" type="submit">Add Task</button>
+    </form>
+  </div>
+</div>
+    
+    <!-- Add this after your main table -->
+<div class="button-container">
+    <button id="toggleFollowUpTasks" class="btn-toggle-form">
+        <i class="fas fa-tasks"></i> Show Follow-up Tasks
+    </button>
+    <button id="whereInMap" class="btn-toggle-form">
+        <i class="fas fa-map-marker-alt"></i> Where in Map
+    </button>
+</div>
+
+
+<div id="followUpTasksContainer" style="display: none;">
+    <table id="followUpTasksTable" class="data-table"> <!-- Use your existing data-table class -->
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Name</th>
+                <th>Task</th>
+                <th>Due Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Follow-up tasks will be populated here -->
+        </tbody>
+    </table>
+</div>
+
+    </div>
+    
+    <div id="map"></div>
+    
+
+    <footer class="retro-border">
+        <p>© 2023 IYF Jaipur. All rights reserved.</p>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/IYFJaipur" aria-label="Facebook">
+                <i class="material-icons">facebook</i>
+            </a>
+            <a href="https://www.instagram.com/iyfjai" aria-label="Instagram">
+                <i class="material-icons">photo_camera</i>
+            </a>
+            <a href="https://twitter.com/IYFJaipur" aria-label="Twitter">
+                <i class="material-icons">chat</i>
+            </a>
+            <a href="https://youtube.com/@thejigyasu?si=6Eswrso-Us3GWlHW" aria-label="YouTube">
+                <i class="material-icons">videocam</i>
+            </a>
+            <a href="https://www.linkedin.com/company/iyfjai" aria-label="LinkedIn">
+                <i class="material-icons">business</i>
+            </a>
+            <a href="https://t.me/IYFJaipur" aria-label="Telegram">
+                <i class="material-icons">send</i>
+            </a>
+        </div>
+    </footer>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script>
+    
+        // Global variables
+let currentPage = 1;
+let entriesPerPage = 25;
+let data = [
+    { id: 1, name: "John Doe", email: "john@example.com", chanting: "16 rounds", group: "A", education: "Bachelor's", address: "123 Main St", created: "2023-05-01T10:30:00Z", profilePic: "https://randomuser.me/api/portraits/men/1.jpg", rating: 0, city: "New York", age: 30, services: "IT Consulting", dob: "1993-05-15", about: "Passionate about technology and spirituality.", blockNumber: 2 },
+    { id: 2, name: "Jane Smith", email: "jane@example.com", chanting: "8 rounds", group: "B", education: "Master's", address: "456 Elm St", created: "2023-05-02T14:45:00Z", profilePic: "https://randomuser.me/api/portraits/women/2.jpg", rating: 0, city: "Los Angeles", age: 28, services: "Graphic Design", dob: "1995-08-22", about: "Creative soul with a love for design and meditation.", blockNumber: 2 },
+    { id: 3, name: "Bob Johnson", email: "bob@example.com", chanting: "4 rounds", group: "C", education: "PhD", address: "789 Oak St", created: "2023-05-03T09:15:00Z", profilePic: "https://randomuser.me/api/portraits/men/3.jpg", rating: 0, city: "Chicago", age: 35, services: "Data Analysis", dob: "1988-03-10", about: "Data enthusiast exploring the intersection of science and spirituality.", blockNumber: 2 },
+    { id: 4, name: "John Doe", email: "john@example.com", chanting: "16 rounds", group: "A", education: "Bachelor's", address: "123 Main St", created: "2023-05-01T10:30:00Z", profilePic: "https://randomuser.me/api/portraits/men/1.jpg", rating: 0, city: "New York", age: 30, services: "IT Consulting", dob: "1993-05-15", about: "Passionate about technology and spirituality.", blockNumber: 2 },
+    { id: 5, name: "Jane Smith", email: "jane@example.com", chanting: "8 rounds", group: "B", education: "Master's", address: "456 Elm St", created: "2023-05-02T14:45:00Z", profilePic: "https://randomuser.me/api/portraits/women/2.jpg", rating: 0, city: "Los Angeles", age: 28, services: "Graphic Design", dob: "1995-08-22", about: "Creative soul with a love for design and meditation.", blockNumber: 2 },
+    { id: 6, name: "Bob Johnson", email: "bob@example.com", chanting: "4 rounds", group: "C", education: "PhD", address: "789 Oak St", created: "2023-05-03T09:15:00Z", profilePic: "https://randomuser.me/api/portraits/men/3.jpg", rating: 0, city: "Chicago", age: 35, services: "Data Analysis", dob: "1988-03-10", about: "Data enthusiast exploring the intersection of science and spirituality.", blockNumber: 2 }
+];
+let currentItemId = Math.max(...data.map(item => item.id), 0) + 1;
+let activeForm = null;
+let currentTaskCreatedDate;
+let map, blockUsers = {}, blockRectangles = [];
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', initializeApp);
+window.addEventListener('resize', repositionNotificationPanel);
+
+// Initialization functions
+function initializeApp() {
+    console.log('Initial data:', data);
+    populateDropdowns();
+    initializeFilters();
+    initializePagination();
+    renderFilteredTable(data);
+    updateNotifications();
+    initializeDatePicker();
+    initializeEventListeners();
+    renderFollowUpTasks();
+    updateNotifications();
+    populateFacilitatorDropdown();
+    checkDataIntegrity();
+    document.addEventListener('DOMContentLoaded', populateFacilitatorDropdown);
+    
+    const whereInMapButton = document.getElementById('whereInMap');
+    if (whereInMapButton) {
+        whereInMapButton.addEventListener('click', toggleMap);
+    }
+}
+
+
+function toggleMap() {
+    const mapDiv = document.getElementById('map');
+    if (mapDiv.style.display === 'none') {
+        mapDiv.style.display = 'block';
+        if (!map) {
+            initMap();
+        }
+        updateMapData(); // Ensure this is called
+        console.log("Map toggled on");
+    } else {
+        mapDiv.style.display = 'none';
+        console.log("Map toggled off");
+    }
+}
+
+
+function initMap() {
+    map = L.map('map').setView([26.9124, 75.7873], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.Control.geocoder({
+        defaultMarkGeocode: false
+    })
+    .on('markgeocode', function(e) {
+        var bbox = e.geocode.bbox;
+        var poly = L.polygon([
+            bbox.getSouthEast(),
+            bbox.getNorthEast(),
+            bbox.getNorthWest(),
+            bbox.getSouthWest()
+        ]).addTo(map);
+        map.fitBounds(poly.getBounds());
+    })
+    .addTo(map);
+
+    // Create block rectangles
+    const latMin = 26.75, latMax = 27.05;
+    const lonMin = 75.55, lonMax = 76.05;
+    const rows = 25, cols = 20;
+    const latStep = (latMax - latMin) / rows;
+    const lonStep = (lonMax - lonMin) / cols;
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            const blockNumber = i * cols + j + 1;
+            const bounds = [[latMin + i * latStep, lonMin + j * lonStep], [latMin + (i + 1) * latStep, lonMin + (j + 1) * lonStep]];
+
+            const rectangle = L.rectangle(bounds, {
+                color: "#FF0000",
+                weight: 1,
+                fillOpacity: 0.1
+            }).addTo(map);
+
+            rectangle.blockNumber = blockNumber;
+
+            rectangle.on('click', function () {
+                displayBlockUsers(this.blockNumber);
+            });
+
+            blockRectangles[blockNumber] = rectangle;
+        }
+    }
+}
+
+function updateMapData() {
+    blockUsers = {};
+    console.log("Updating map data. Total items:", data.length);
+    data.forEach(item => {
+        const blockNumber = item.blockNumber;
+        if (!blockNumber) {
+            console.warn("Item missing blockNumber:", item);
+            return; // Skip this item
+        }
+        if (!blockUsers[blockNumber]) {
+            blockUsers[blockNumber] = [];
+        }
+        blockUsers[blockNumber].push({
+            name: item.name,
+            group: item.group,
+            mobile: item.mobile
+        });
+    });
+    console.log("Block users after update:", blockUsers);
+}
+
+
+function displayBlockUsers(blockNumber) {
+    console.log("Displaying users for block:", blockNumber);
+    const users = blockUsers[blockNumber] || [];
+    console.log("Users in this block:", users);
+
+    let contentString = `
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>Block ${blockNumber}</h3>
+            <span class="total-users">Total: ${users.length}</span>
+        </div>`;
+
+    if (users.length > 0) {
+        // Group-wise user count
+        const groupCounts = users.reduce((acc, user) => {
+            acc[user.group] = (acc[user.group] || 0) + 1;
+            return acc;
+        }, {});
+
+        contentString += '<p><strong>Group-wise:</strong></p><ul>';
+        for (const [group, count] of Object.entries(groupCounts)) {
+            contentString += `<li>${group}: ${count}</li>`;
+        }
+        contentString += '</ul>';
+
+        // List of users
+        contentString += '<div class="scrollable-list"><h4>User Details:</h4><ul>';
+        users.forEach(user => {
+            contentString += `<li><strong>Name:</strong> ${user.name}<br><strong>Group:</strong> ${user.group}<br><strong>Mobile:</strong> ${user.mobile}</li>`;
+        });
+        contentString += '</ul></div>';
+    } else {
+        contentString += '<p>No users assigned to this block.</p>';
+    }
+
+    contentString += '</div>';
+
+    L.popup()
+        .setLatLng(blockRectangles[blockNumber].getBounds().getCenter())
+        .setContent(contentString)
+        .openOn(map);
+}
+
+
+
+function checkDataIntegrity() {
+    console.log("Checking data integrity");
+    data.forEach((item, index) => {
+        if (!item.blockNumber) {
+            console.warn(`Item at index ${index} is missing blockNumber:`, item);
+        }
+        if (!item.name || !item.group || !item.mobile) {
+            console.warn(`Item at index ${index} is missing required fields:`, item);
+        }
+    });
+}
+
+
+function initializeDatePicker() {
+    const dobInput = document.getElementById('dobInput');
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        dobInput.type = 'date';
+        dobInput.addEventListener('change', handleMobileDateChange);
+    } else {
+        initializeDesktopDatePicker(dobInput);
+    }
+}
+
+function initializeEventListeners() {
+    document.querySelector('.btn-apply-filter').addEventListener('click', applyFilter);
+    document.querySelector('.notification-icon').onclick = toggleNotificationPanel;
+    document.addEventListener('click', handleRowCheckboxClick);
+    document.getElementById('toggleFollowUpTasks').addEventListener('click', toggleFollowUpTasks);
+    initializeModalEventListeners();
+}
+
+function initializeModalEventListeners() {
+    const modal = document.getElementById('followUpModal');
+    const span = document.getElementsByClassName("close")[0];
+    const form = document.getElementById('followUpForm');
+    span.onclick = closeModal;
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+    form.onsubmit = addFollowUpTask;
+}
+
+// Table rendering and filtering functions
+function renderFilteredTable(filteredData) {
+    const tbody = document.querySelector("#dataTable tbody");
+    tbody.innerHTML = "";
+
+    console.log('Rendering filtered data:', filteredData);
+
+    if (filteredData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6">No matching records found</td></tr>';
+        updatePagination(0);
+        return;
+    }
+
+    let startIndex = (currentPage - 1) * entriesPerPage;
+    let endIndex = startIndex + parseInt(entriesPerPage);
+    let paginatedData = filteredData.slice(startIndex, endIndex);
+
+    paginatedData.forEach((item, index) => {
+        const mainRow = `
+            <tr>
+                <td><input type="checkbox" class="rowCheckbox" data-id="${item.id}"></td>
+                <td>${startIndex + index + 1}</td>
+                <td><img src="${item.profilePic}" alt="${item.name}" class="profile-pic"></td>
+                <td><div class="truncate" data-full-text="${item.name}">${item.name}</div></td>
+                <td><div class="truncate" data-full-text="${item.group}">${item.group}</div></td>
+                <td>
+                    <div class="action-icons">
+                        <button class="action-icon icon-toggle" onclick="toggleDetails(${item.id})" title="Toggle Details">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <button class="action-icon icon-edit" onclick="editRow(${item.id})" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-icon icon-delete" onclick="deleteRow(${item.id})" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <a href="https://wa.me/+91${item.mobile}" class="action-icon icon-whatsapp" target="_blank" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        `;
+        const detailsRow = `
+            <tr class="details-row" id="details-${item.id}">
+                <td colspan="6">
+                    <div class="details-content">
+                        <div class="details-image">
+                            <img src="${item.profilePic}" alt="${item.name}" class="profile-pic-large" id="profilePic-${item.id}">
+                            <input type="file" id="profilePicInput-${item.id}" style="display: none;" accept="image/*">
+                            <div class="rating">
+                                <div class="stars" id="stars-${item.id}">
+                                    ${renderStars(item.id, item.rating)}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="details-info" id="details-info-${item.id}">
+                            <p><strong>Name:</strong> <span class="editable" data-field="name">${item.name}</span></p>
+                            <p><strong>Mobile:</strong> <span class="editable" data-field="mobile">${item.mobile || 'N/A'}</span></p>
+                            <p><strong>Email:</strong> <span class="editable" data-field="email">${item.email}</span></p>
+                            <p><strong>Group:</strong> <span class="editable" data-field="group">${item.group}</span></p>
+                            <p><strong>Place of Preaching:</strong> <span class="editable" data-field="pop">${item.pop || 'N/A'}</span></p>
+                            <p><strong>Facilitator:</strong> <span class="editable" data-field="facilitator">${item.facilitator || 'N/A'}</span></p>
+                            <p><strong>Chanting:</strong> <span class="editable" data-field="chanting">${item.chanting}</span></p>
+                            <p><strong>Education:</strong> <span class="editable" data-field="education">${item.education}</span></p>
+                            <p><strong>Address:</strong> <span class="editable" data-field="address">${item.address}</span></p>
+                            <p><strong>City:</strong> <span class="editable" data-field="city">${item.city}</span></p>
+                            <p><strong>Block No:</strong> <span class="editable" data-field="blockNo">${item.blockNo || 'N/A'}</span></p>
+                            <p><strong>Age:</strong> <span class="editable" data-field="age">${item.age}</span></p>
+                            <p><strong>Services:</strong> <span class="editable" data-field="services">${item.services}</span></p>
+                            <p><strong>DOB:</strong> <span class="editable" data-field="dob">${formatDate(item.dob)}</span></p>
+                            <p><strong>About:</strong> <span class="editable" data-field="about">${item.about}</span></p>
+                            <p><strong>Created:</strong> ${formatDate(item.created)}</p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+        tbody.insertAdjacentHTML("beforeend", mainRow);
+        tbody.insertAdjacentHTML("beforeend", detailsRow);
+    });
+
+    updatePagination(filteredData.length);
+    updateMasterCheckbox();
+}
+
+function applyFilter() {
+    const group = document.getElementById("filterGroup").value;
+    const chanting = document.getElementById("filterChanting").value;
+    const city = document.getElementById("filterCity").value;
+    const blockNo = document.getElementById("filterBlockNo").value;
+    const ageFrom = parseInt(document.getElementById("filterAgeFrom").value) || 0;
+    const ageTo = parseInt(document.getElementById("filterAgeTo").value) || Infinity;
+    const services = document.getElementById("filterServices").value;
+    const pop = document.getElementById("filterPOP").value;
+    const facilitator = document.getElementById("filterFacilitator").value;
+
+    console.log('Filter criteria:', { group, chanting, city, blockNo, ageFrom, ageTo, services, pop, facilitator });
+
+    const filteredData = data.filter(item => {
+        return (
+            (group === "" || item.group === group) &&
+            (chanting === "" || item.chanting === chanting) &&
+            (city === "" || item.city === city) &&
+            (blockNo === "" || (item.blockNo && item.blockNo.toString() === blockNo)) &&
+            (isNaN(item.age) || (item.age >= ageFrom && item.age <= ageTo)) &&
+            (services === "" || item.services === services) &&
+            (pop === "" || (item.pop && item.pop === pop)) &&
+            (facilitator === "" || (item.facilitator && item.facilitator.toLowerCase().includes(facilitator.toLowerCase())))
+        );
+    });
+
+    console.log('Filtered Data:', filteredData);
+    console.log('Original Data:', data);
+
+    renderFilteredTable(filteredData);
+}
+
+function searchTable() {
+    const searchInput = document.getElementById("searchInput");
+    const filter = searchInput.value.toLowerCase();
+    currentPage = 1; // Reset to first page when searching
+    
+    const filteredData = data.filter(item => {
+        const textContent = Object.values(item).join(" ").toLowerCase();
+        return textContent.includes(filter);
+    });
+
+    renderFilteredTable(filteredData);
+}
+
+function getRowTextContent(row) {
+    return Array.from(row.querySelectorAll('td')).map(td => td.textContent).join(" ");
+}
+
+function clearFilter() {
+    document.getElementById("filterGroup").value = "";
+    document.getElementById("filterChanting").value = "";
+    document.getElementById("filterCity").value = "";
+    document.getElementById("filterBlockNo").value = "";
+    document.getElementById("filterAgeFrom").value = "";
+    document.getElementById("filterAgeTo").value = "";
+    document.getElementById("filterServices").value = "";
+    document.getElementById("filterPOP").value = "";
+    document.getElementById("filterFacilitator").value = "";
+    currentPage = 1;
+    renderTable();
+    populateDropdowns(); // Update filter dropdowns after clearing
+}
+
+// CRUD operations
+function addRow() {
+            const nameInput = document.getElementById("nameInput");
+            const groupInput = document.getElementById("groupInput");
+            const mobileInput = document.getElementById("mobileInput");
+            const emailInput = document.getElementById("emailInput");
+            const chantingInput = document.getElementById("chantingInput");
+            const educationInput = document.getElementById("educationInput");
+            const addressInput = document.getElementById("addressInput");
+            const cityInput = document.getElementById("cityInput");
+            const blockNoInput = document.getElementById("blockNoInput");
+            const ageInput = document.getElementById("ageInput");
+            const servicesInput = document.getElementById("servicesInput");
+            const dobInput = document.getElementById("dobInput");
+            const aboutInput = document.getElementById("aboutInput");
+            const profilePicInput = document.getElementById("profilePicInput");
+            const pop = document.getElementById("popInput").value.trim();
+            const facilitatorInput = document.getElementById("facilitatorInput");
+    
+        
+            const name = nameInput.value.trim();
+            const group = groupInput.value.trim();
+            const mobile = mobileInput.value.trim();
+            const email = emailInput.value.trim();
+            const chanting = chantingInput.value.trim();
+            const education = educationInput.value.trim();
+            const address = addressInput.value.trim();
+            const city = cityInput.value.trim();
+            const blockNo = blockNoInput.value.trim();
+            const age = parseInt(ageInput.value);
+            const services = servicesInput.value.trim();
+            const dob = dobInput.value;
+            const about = aboutInput.value.trim();
+            const facilitator = facilitatorInput.value.trim();
+        
+            if (name && group && pop && facilitator) {
+        const newId = data.length > 0 ? Math.max(...data.map(item => item.id)) + 1 : 1;
+        const now = new Date().toISOString();
+        // Handle profile picture
+        const file = profilePicInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const profilePic = e.target.result;
+                data.push({ id: newId, name, group, email, chanting, education, address, city, blockNo, age, services, dob, about, created: now, profilePic, rating: 0, mobile, pop, facilitator });
+                renderTable();
+                clearInputs();
+                populateDropdowns();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            const defaultProfilePic = "https://randomuser.me/api/portraits/lego/1.jpg";
+            data.push({ id: newId, name, group, email, chanting, education, address, city, blockNo, age, services, dob, about, created: now, profilePic: defaultProfilePic, rating: 0, mobile, pop, facilitator });
+            renderTable();
+            clearInputs();
+            populateDropdowns();
+            populateFacilitatorDropdown();
+            updateNotifications();
+        }
+    } else {
+        alert("Please fill in all required fields.");
+    }
+}
+
+function editRow(id) {
+    const detailsRow = document.getElementById(`details-${id}`);
+    const detailsInfo = detailsRow.querySelector('.details-info');
+    const editButton = document.querySelector(`button[onclick="editRow(${id})"]`);
+    const profilePic = document.getElementById(`profilePic-${id}`);
+    const profilePicInput = document.getElementById(`profilePicInput-${id}`);
+
+    if (editButton.title === 'Edit') {
+        // Make content editable
+        detailsInfo.querySelectorAll('.editable').forEach(span => {
+            const field = span.dataset.field;
+            const type = span.dataset.type;
+
+            if (field === 'pop') {
+                const currentValue = span.textContent;
+                const select = document.createElement('select');
+                select.className = 'form-input';
+                const options = ['College', 'Campus'];
+                options.forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option;
+                    optionElement.textContent = option;
+                    if (option === currentValue) optionElement.selected = true;
+                    select.appendChild(optionElement);
+                });
+                span.parentNode.replaceChild(select, span);
+            } else if (field === 'facilitator') {
+                const currentValue = span.textContent;
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'form-input';
+                input.value = currentValue;
+                input.setAttribute('list', `facilitatorList-${id}`);
+
+                const datalist = document.createElement('datalist');
+                datalist.id = `facilitatorList-${id}`;
+
+                const facilitators = [...new Set(data.map(item => item.facilitator).filter(Boolean))];
+                facilitators.forEach(facilitator => {
+                    const option = document.createElement('option');
+                    option.value = facilitator;
+                    datalist.appendChild(option);
+                });
+
+                const container = document.createElement('div');
+                container.appendChild(input);
+                container.appendChild(datalist);
+
+                span.parentNode.replaceChild(container, span);
+            } else if (type === 'select' && field === 'group') {
+                const currentValue = span.textContent;
+                const select = document.createElement('select');
+                select.className = 'form-input';
+                const groups = ['Bhisma', 'Bhima', 'Arjun', 'Yudhisthira', 'Nakul', 'Sahdev', 'Nachiketa', 'Well Wisher'];
+                groups.forEach(group => {
+                    const option = document.createElement('option');
+                    option.value = group;
+                    option.textContent = group;
+                    if (group === currentValue) option.selected = true;
+                    select.appendChild(option);
+                });
+                span.parentNode.replaceChild(select, span);
+            } else if (type === 'date' && field === 'dob') {
+                const input = document.createElement('input');
+                input.type = 'date';
+                input.value = span.textContent;
+                input.className = 'form-input';
+                span.parentNode.replaceChild(input, span);
+                
+                // Initialize Flatpickr for desktop
+                if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    flatpickr(input, {
+                        dateFormat: "d-m-Y",
+                        allowInput: true,
+                        clickOpens: true
+                    });
+                }
+            } else {
+                span.contentEditable = 'true';
+                span.style.backgroundColor = '#f0f0f0';
+            }
+        });
+
+        profilePic.style.cursor = 'pointer';
+        profilePic.onclick = () => profilePicInput.click();
+        
+        // Create a custom button for changing profile picture
+        const changePhotoBtn = document.createElement('button');
+        changePhotoBtn.textContent = 'Change Photo';
+        changePhotoBtn.className = 'btn-change-photo';
+        changePhotoBtn.onclick = () => profilePicInput.click();
+        profilePic.parentNode.insertBefore(changePhotoBtn, profilePic.nextSibling);
+
+        profilePicInput.style.display = 'none'; // Hide the actual file input
+        editButton.innerHTML = '<i class="fas fa-save"></i>';
+        editButton.title = 'Save';
+    } else {
+        // Save the changes
+        detailsInfo.querySelectorAll('.editable, select, input[type="date"], input[type="text"]').forEach(element => {
+            const field = element.dataset.field || element.getAttribute('data-field');
+            let value;
+
+            if (element.tagName === 'SELECT' || element.type === 'date' || element.type === 'text') {
+                value = element.value;
+                const span = document.createElement('span');
+                span.className = 'editable';
+                span.dataset.field = field;
+                span.dataset.type = element.tagName === 'SELECT' ? 'select' : element.type;
+                span.textContent = value;
+                if (field === 'facilitator') {
+                    element.parentNode.parentNode.replaceChild(span, element.parentNode);
+                } else {
+                    element.parentNode.replaceChild(span, element);
+                }
+            } else {
+                value = element.textContent.trim();
+                element.contentEditable = 'false';
+                element.style.backgroundColor = '';
+            }
+
+            const item = data.find(item => item.id === id);
+            if (item) {
+                item[field] = value;
+            }
+        });
+
+        profilePic.style.cursor = '';
+        profilePic.onclick = null;
+        
+        // Remove the custom change photo button
+        const changePhotoBtn = detailsRow.querySelector('.btn-change-photo');
+        if (changePhotoBtn) changePhotoBtn.remove();
+
+        editButton.innerHTML = '<i class="fas fa-edit"></i>';
+        editButton.title = 'Edit';
+
+        // Handle profile picture change
+        const file = profilePicInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const item = data.find(item => item.id === id);
+                if (item) {
+                    item.profilePic = e.target.result;
+                    profilePic.src = e.target.result;
+                    renderTable();
+                    populateDropdowns();
+                    updateNotifications();
+                }
+            };
+            reader.readAsDataURL(file);
+        } else {
+            renderTable();
+            populateDropdowns();
+            updateNotifications();
+        }
+
+        // Update the data in localStorage
+        localStorage.setItem('memberData', JSON.stringify(data));
+    }
+}
+
+function deleteRow(id) {
+    if (confirm("Are you sure you want to delete this row?")) {
+        data = data.filter(item => item.id !== id);
+        renderTable();
+        populateDropdowns(); // Update filter dropdowns
+        updateNotifications();
+    }
+}
+
+// Follow-up task functions
+function followUpTask(id) {
+    const item = data.find(item => item.id === id);
+    if (item) {
+        // You can customize this prompt or replace it with a modal dialog
+        const task = prompt(`Enter a follow-up task for ${item.name}:`);
+        if (task) {
+            // Store the task (you might want to add it to your data structure)
+            if (!item.followUpTasks) {
+                item.followUpTasks = [];
+            }
+            item.followUpTasks.push({
+                task: task,
+                date: new Date().toISOString(),
+                completed: false
+            });
+            alert(`Follow-up task added for ${item.name}`);
+            // Optionally, you can update the UI to reflect the new task
+            renderTable();
+        }
+    }
+}
+
+function followUpTask(id) {
+    currentItemId = id;
+    const modal = document.getElementById('followUpModal');
+    modal.style.display = "block";
+}
+
+function addFollowUpTask(event) {
+    event.preventDefault();
+    const taskDescription = document.getElementById('taskDescription').value;
+    const taskDueDate = document.getElementById('taskDueDate').value;
+    
+    const item = data.find(item => item.id === currentItemId);
+    if (item) {
+        if (!item.followUpTasks) {
+            item.followUpTasks = [];
+        }
+        item.followUpTasks.push({
+            task: taskDescription,
+            dueDate: taskDueDate,
+            createdDate: new Date().toISOString(),
+            completed: false
+        });
+        alert(`Follow-up task added for ${item.name}`);
+        closeModal();
+        renderFollowUpTasks();
+
+        // Check if the new task is due today and update notifications if so
+        const today = luxon.DateTime.now().toISODate();
+        if (taskDueDate === today) {
+            updateNotifications();
+        }
+    }
+}
+
+function editFollowUpTask(itemId, taskCreatedDate) {
+    const item = data.find(i => i.id === itemId);
+    if (item) {
+        const task = item.followUpTasks.find(t => t.createdDate === taskCreatedDate);
+        if (task) {
+            currentItemId = itemId;
+            currentTaskCreatedDate = taskCreatedDate;
+            
+            // Populate the form with existing task data
+            document.getElementById('taskDescription').value = task.task;
+            document.getElementById('taskDueDate').value = task.dueDate;
+            
+            // Change the form submission handler
+            document.getElementById('followUpForm').onsubmit = updateFollowUpTask;
+            
+            // Show the modal
+            document.getElementById('followUpModal').style.display = "block";
+        }
+    }
+}
+
+function updateFollowUpTask(event) {
+    event.preventDefault();
+    
+    const taskDescription = document.getElementById('taskDescription').value;
+    const taskDueDate = document.getElementById('taskDueDate').value;
+    
+    const item = data.find(i => i.id === currentItemId);
+    if (item) {
+        const taskIndex = item.followUpTasks.findIndex(t => t.createdDate === currentTaskCreatedDate);
+        if (taskIndex !== -1) {
+            item.followUpTasks[taskIndex] = {
+                ...item.followUpTasks[taskIndex],
+                task: taskDescription,
+                dueDate: taskDueDate,
+                updatedDate: new Date().toISOString()
+            };
+            
+            // Save the updated data (you might want to implement this function)
+            saveData();
+            
+            // Close the modal
+            document.getElementById('followUpModal').style.display = "none";
+            
+            // Clear the form
+            document.getElementById('followUpForm').reset();
+            
+            // Refresh the notification panel
+            updateNotifications();
+            
+            // Optionally, you might want to refresh the table or the specific row
+            renderFilteredTable(data);
+        }
+    }
+}
+
+function deleteFollowUpTask(itemId, taskCreatedDate) {
+    if (confirm("Are you sure you want to delete this follow-up task?")) {
+        const item = data.find(i => i.id === itemId);
+        if (item) {
+            item.followUpTasks = item.followUpTasks.filter(t => t.createdDate !== taskCreatedDate);
+            renderFollowUpTasks();
+        }
+    }
+}
+
+function renderFollowUpTasks() {
+    const tbody = document.querySelector("#followUpTasksTable tbody");
+    tbody.innerHTML = '';
+    let sNo = 1;
+    data.forEach(item => {
+        if (item.followUpTasks && item.followUpTasks.length > 0) {
+            item.followUpTasks.forEach(task => {
+                const truncatedTask = truncateText(task.task, 50); // Truncate to 50 characters
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${sNo}</td>
+                    <td>${item.name}</td>
+                    <td class="task-description" data-tooltip="${escapeHtml(task.task)}">
+                        <span class="truncated-text">${truncatedTask}</span>
+                    </td>
+                    <td>${task.dueDate}</td>
+                    <td>
+                        <div class="action-icons">
+                            <button class="action-icon edit-task" title="Edit Task">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-icon delete-task" title="Delete Task">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                const editBtn = row.querySelector('.edit-task');
+                const deleteBtn = row.querySelector('.delete-task');
+
+                editBtn.addEventListener('click', () => {
+                    editFollowUpTask(item.id, task.createdDate);
+                });
+
+                deleteBtn.addEventListener('click', () => {
+                    deleteFollowUpTask(item.id, task.createdDate);
+                });
+
+                tbody.appendChild(row);
+                sNo++;
+            });
+        }
+    });
+    initTooltips();
+}
+
+// Utility functions
+function populateDropdowns() {
+    const cities = [...new Set(data.map(item => item.city).filter(Boolean))];
+    const services = [...new Set(data.map(item => item.services).filter(Boolean))];
+    const chantings = [...new Set(data.map(item => item.chanting).filter(Boolean))];
+    const groups = [...new Set(data.map(item => item.group).filter(Boolean))];
+    const blockNumbers = [...new Set(data.map(item => item.blockNo).filter(Boolean))];
+    const facilitators = [...new Set(data.map(item => item.facilitator).filter(Boolean))];
+    
+    console.log('Unique values:', { cities, services, chantings, groups, blockNumbers, facilitators });
+
+    populateDropdown("filterCity", cities, "Select City");
+    populateDropdown("filterServices", services, "Select Service");
+    populateDropdown("filterChanting", chantings, "Select Chanting");
+    populateDropdown("filterGroup", groups, "Select Group");
+    populateDropdown("filterBlockNo", blockNumbers, "Select Block Number");
+    populateDropdown("filterFacilitatorList", facilitators);
+    console.log('Dropdowns populated');
+    
+}
+
+function populateFacilitatorDropdown() {
+    const facilitatorList = document.getElementById('facilitatorList');
+    facilitatorList.innerHTML = '';
+    const facilitators = [...new Set(data.map(item => item.facilitator).filter(Boolean))];
+    facilitators.forEach(facilitator => {
+        const option = document.createElement('option');
+        option.value = facilitator;
+        facilitatorList.appendChild(option);
+    });
+}
+
+function updatePagination(totalItems) {
+    const pageButtons = document.getElementById('pageButtons');
+    pageButtons.innerHTML = '';
+
+    const totalPages = entriesPerPage === 'all' ? 1 : Math.ceil(totalItems / parseInt(entriesPerPage));
+
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i;
+        button.classList.add('page-button');
+        if (i === currentPage) button.classList.add('active');
+        button.onclick = () => {
+            currentPage = i;
+            applyFilter(); // Re-apply filter when changing pages
+        };
+        pageButtons.appendChild(button);
+    }
+}
+
+function toggleNotificationPanel() {
+    const panel = document.getElementById('notificationPanel');
+    panel.classList.toggle('show');
+    
+    if (panel.classList.contains('show')) {
+        updateNotifications();
+        document.getElementById('notificationBadge').style.display = 'none';
+        
+        // Position the panel for desktop view
+        if (window.innerWidth > 768) {
+            const icon = document.querySelector('.notification-icon');
+            const iconRect = icon.getBoundingClientRect();
+            panel.style.top = `${iconRect.bottom}px`;
+            panel.style.right = `${window.innerWidth - iconRect.right}px`;
+        }
+    }
+}
+
+function updateNotifications() {
+    const today = luxon.DateTime.now();
+    const notificationList = document.getElementById('notificationList');
+    notificationList.innerHTML = '';
+
+    let notificationCount = 0;
+
+    // Birthday notifications
+    data.forEach(item => {
+        if (item.dob) {
+            const dob = luxon.DateTime.fromISO(item.dob);
+            const nextBirthday = dob.set({ year: today.year });
+            const daysDiff = Math.ceil(nextBirthday.diff(today, 'days').days);
+
+            if (daysDiff >= 0 && daysDiff <= 7) {  // Show notifications for upcoming 7 days
+                const notificationItem = document.createElement('div');
+                notificationItem.className = 'notification-item';
+                
+                const notificationText = document.createElement('span');
+                notificationText.className = 'notification-text';
+                notificationText.textContent = `${item.name}'s birthday`;
+                
+                const whatsappLink = document.createElement('a');
+                whatsappLink.href = `https://wa.me/+91${item.mobile}?text=A%20Very%20Happy%20Krishna%20Conscious%20Birthday%20${encodeURIComponent(item.name)}%20🎊🥳🎂`;
+                whatsappLink.target = '_blank';
+                whatsappLink.className = 'notification-whatsapp';
+                whatsappLink.innerHTML = '<i class="fab fa-whatsapp"></i>';
+
+                notificationItem.appendChild(notificationText);
+                notificationItem.appendChild(whatsappLink);
+                notificationList.appendChild(notificationItem);
+                notificationCount++;
+            }
+        }
+    });
+
+    // Task notifications
+    const todaysTasks = getTodaysTasks();
+    todaysTasks.forEach(task => {
+        const notificationItem = document.createElement('div');
+        notificationItem.className = 'notification-item';
+        notificationItem.innerHTML = `
+            <span class="notification-text">${task.name}: ${truncateText(task.task, 30)}</span>
+            <button class="delete-notification" data-id="${task.id}" data-created="${task.taskCreatedDate}" title="Delete Task">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        `;
+        notificationList.appendChild(notificationItem);
+        notificationCount++;
+    });
+
+    // Add event listeners for delete buttons
+    document.querySelectorAll('.delete-notification').forEach(button => {
+        button.addEventListener('click', deleteTaskNotification);
+    });
+
+    if (notificationCount === 0) {
+        notificationList.innerHTML = '<p>No notifications for today.</p>';
+    }
+
+    // Update notification badge
+    const badge = document.getElementById('notificationBadge');
+    if (notificationCount > 0) {
+        badge.textContent = notificationCount;
+        badge.style.display = 'block';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+function truncateText(text, maxLength) {
+    if (text.length <= maxLength) return text;
+    return text.substr(0, maxLength) + '...';
+}
+
+// Bulk action functions
+function toggleAllCheckboxes() {
+    const masterCheckbox = document.getElementById('masterCheckbox');
+    const rowCheckboxes = document.querySelectorAll('.rowCheckbox');
+    rowCheckboxes.forEach(checkbox => {
+        checkbox.checked = masterCheckbox.checked;
+    });
+}
+
+function getSelectedRows() {
+    const selectedCheckboxes = document.querySelectorAll('.rowCheckbox:checked');
+    return Array.from(selectedCheckboxes).map(checkbox => parseInt(checkbox.dataset.id));
+}
+
+function updateMasterCheckbox() {
+    const masterCheckbox = document.getElementById('masterCheckbox');
+    const rowCheckboxes = document.querySelectorAll('.rowCheckbox');
+    masterCheckbox.checked = rowCheckboxes.length > 0 && Array.from(rowCheckboxes).every(checkbox => checkbox.checked);
+}
+
+
+function applyBulkActions() {
+    const selectedIds = getSelectedRows();
+    if (selectedIds.length === 0) {
+        alert("Please select at least one row to apply bulk actions.");
+        return;
+    }
+
+    const newGroup = document.getElementById("bulkActionGroup").value;
+    const newBlockNo = document.getElementById("bulkActionBlockNo").value;
+    const newChanting = document.getElementById("bulkActionChanting").value;
+    const newService = document.getElementById("bulkActionService").value;
+    const newPOP = document.getElementById("bulkActionPOP").value;
+    const newFacilitator = document.getElementById("bulkActionFacilitator").value;
+
+    data = data.map(item => {
+        if (selectedIds.includes(item.id)) {
+            return {
+                ...item,
+                group: newGroup || item.group,
+                blockNo: newBlockNo || item.blockNo,
+                chanting: newChanting || item.chanting,
+                services: newService || item.services,
+                pop: newPOP || item.pop,
+                facilitator: newFacilitator || item.facilitator
+            };
+        }
+        return item;
+    });
+
+    renderTable();
+    populateDropdowns();
+    updateNotifications();
+    populateFacilitatorDropdown(); // Use your existing function
+    alert("Bulk actions applied successfully!");
+}
+
+function deleteBulkRows() {
+    const selectedIds = getSelectedRows();
+    if (selectedIds.length === 0) {
+        alert("Please select at least one row to delete.");
+        return;
+    }
+
+    if (confirm(`Are you sure you want to delete ${selectedIds.length} selected row(s)?`)) {
+        data = data.filter(item => !selectedIds.includes(item.id));
+        renderTable();
+        populateDropdowns();
+        updateNotifications();
+        populateFacilitatorDropdown(); // Use your existing function
+        alert("Selected rows deleted successfully!");
+    }
+}
+
+
+// Helper functions
+function closeModal() {
+    const modal = document.getElementById('followUpModal');
+    modal.style.display = "none";
+    document.getElementById('followUpForm').reset();
+    // Reset the form submission handler to addFollowUpTask
+    document.getElementById('followUpForm').onsubmit = addFollowUpTask;
+}
+
+function handleMobileDateChange() {
+    // ... (existing handleMobileDateChange function)
+}
+
+function initializeDesktopDatePicker(dobInput) {
+    // ... (existing initializeDesktopDatePicker function)
+}
+
+function handleRowCheckboxClick(event) {
+    if (event.target.classList.contains('rowCheckbox')) {
+        updateMasterCheckbox();
+    }
+}
+
+function repositionNotificationPanel() {
+    // ... (existing repositionNotificationPanel function)
+}
+
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
+
+function initTooltips() {
+    const tooltipElements = document.querySelectorAll('[data-tooltip]');
+    tooltipElements.forEach(element => {
+        element.addEventListener('mouseenter', showTooltip);
+        element.addEventListener('mouseleave', hideTooltip);
+    });
+}
+
+function showTooltip(event) {
+    const tooltipText = this.getAttribute('data-tooltip');
+    const tooltip = document.createElement('div');
+    tooltip.className = 'custom-tooltip';
+    tooltip.textContent = tooltipText;
+    document.body.appendChild(tooltip);
+
+    const rect = this.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    let top = rect.top - tooltipRect.height - 10;
+    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+
+    // Adjust if tooltip goes off-screen
+    if (top < 0) top = rect.bottom + 10;
+    if (left < 0) left = 0;
+    if (left + tooltipRect.width > window.innerWidth) left = window.innerWidth - tooltipRect.width;
+
+    tooltip.style.top = `${top + window.scrollY}px`;
+    tooltip.style.left = `${left}px`;
+}
+
+function hideTooltip() {
+    const tooltip = document.querySelector('.custom-tooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Initial data:', data);
+    populateDropdowns();
+    initializeFilters();
+    initializePagination();
+    renderFilteredTable(data);
+    updateNotifications();
+    const dobInput = document.getElementById('dobInput');
+    const toggleButton = document.getElementById('toggleFollowUpTasks');
+    toggleButton.addEventListener('click', toggleFollowUpTasks);
+
+    // Check if the device is mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        // Use native date picker for mobile devices
+        dobInput.type = 'date';
+        dobInput.addEventListener('change', function() {
+            if (this.value) {
+                this.classList.add('has-date');
+            } else {
+                this.classList.remove('has-date');
+            }
+        });
+    } else {
+        // Use Flatpickr for desktop
+        flatpickr(dobInput, {
+            dateFormat: "d-m-Y",
+            allowInput: true,
+            clickOpens: true,
+            onChange: function(selectedDates, dateStr, instance) {
+                if (dateStr) {
+                    instance.input.classList.add('has-date');
+                } else {
+                    instance.input.classList.remove('has-date');
+                }
+            }
+        });
+
+        // Open datepicker on focus for desktop
+        dobInput.addEventListener('focus', function() {
+            this._flatpickr.open();
+        });
+    }
+
+    // Add event listener for the Apply Filter button
+    document.querySelector('.btn-apply-filter').addEventListener('click', function() {
+        console.log('Apply Filter button clicked');
+        applyFilter();
+    });
+
+    // Initialize filters and pagination
+    initializeFilters();
+    initializePagination();
+    updateNotifications();
+    document.querySelector('.notification-icon').onclick = toggleNotificationPanel;
+    
+    // Add event listener for row checkboxes
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('rowCheckbox')) {
+            updateMasterCheckbox();
+        }
+    });
+
+    renderFollowUpTasks();
+    updateNotifications();
+    populateFacilitatorDropdown();
+});
+
+
+        function renderTable() {
+            const tbody = document.querySelector("#dataTable tbody");
+            tbody.innerHTML = "";
+        
+            let startIndex = (currentPage - 1) * entriesPerPage;
+            let endIndex = entriesPerPage === 'all' ? data.length : startIndex + parseInt(entriesPerPage);
+            let paginatedData = data.slice(startIndex, endIndex);
+        
+            paginatedData.forEach((item, index) => {
+        const mainRow = `
+            <tr>
+                <td><input type="checkbox" class="rowCheckbox" data-id="${item.id}"></td>
+                <td>${startIndex + index + 1}</td>
+                <td><img src="${item.profilePic}" alt="${item.name}" class="profile-pic"></td>
+                <td><div class="truncate" data-full-text="${item.name}">${item.name}</div></td>
+                <td><div class="truncate" data-full-text="${item.group}">${item.group}</div></td>
+                <td>
+                    <div class="action-icons">
+                        <button class="action-icon icon-toggle" onclick="toggleDetails(${item.id})" title="Toggle Details">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <button class="action-icon icon-edit" onclick="editRow(${item.id})" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-icon icon-delete" onclick="deleteRow(${item.id})" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button class="action-icon icon-followup" onclick="followUpTask(${item.id})" title="Follow Up Task">
+                            <i class="fas fa-tasks"></i>
+                        </button>
+                        <a href="https://wa.me/+91${item.mobile}" class="action-icon icon-whatsapp" target="_blank" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        `;
+                const detailsRow = `
+                    <tr class="details-row" id="details-${item.id}">
+                        <td colspan="6">
+                            <div class="details-content">
+                                <div class="details-image">
+                                    <img src="${item.profilePic}" alt="${item.name}" class="profile-pic-large" id="profilePic-${item.id}">
+                                    <input type="file" id="profilePicInput-${item.id}" style="display: none;" accept="image/*">
+                                    <div class="rating">
+                                        <div class="stars" id="stars-${item.id}">
+                                            ${renderStars(item.id, item.rating)}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="details-info" id="details-info-${item.id}">
+                                    <p><strong>Name:</strong> <span class="editable" data-field="name">${item.name}</span></p>
+                                    <p><strong>Mobile:</strong> <span class="editable" data-field="mobile">${item.mobile || 'N/A'}</span></p>
+                                    <p><strong>Email:</strong> <span class="editable" data-field="email">${item.email}</span></p>
+                                    <p><strong>Group:</strong> <span class="editable" data-field="group" data-type="select">${item.group}</span></p>
+                                    <p><strong>Place of Preaching:</strong> <span class="editable" data-field="pop">${item.pop}</span></p>
+                                    <p><strong>Facilitator:</strong> <span class="editable" data-field="facilitator">${item.facilitator}</span></p>
+                                    <p><strong>Chanting:</strong> <span class="editable" data-field="chanting">${item.chanting}</span></p>
+                                    <p><strong>Education:</strong> <span class="editable" data-field="education">${item.education}</span></p>
+                                    <p><strong>Address:</strong> <span class="editable" data-field="address">${item.address}</span></p>
+                                    <p><strong>City:</strong> <span class="editable" data-field="city">${item.city}</span></p>
+                                    <p><strong>Block No:</strong> <span class="editable" data-field="blockNo">${item.blockNo || 'N/A'}</span></p>
+                                    <p><strong>Age:</strong> <span class="editable" data-field="age">${item.age}</span></p>
+                                    <p><strong>Services:</strong> <span class="editable" data-field="services">${item.services}</span></p>
+                                    <p><strong>DOB:</strong> <span class="editable" data-field="dob" data-type="date">${formatDate(item.dob)}</span></p>
+                                    <p><strong>About:</strong> <span class="editable" data-field="about">${item.about}</span></p>
+                                    <p><strong>Created:</strong> ${formatDate(item.created)}</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.insertAdjacentHTML("beforeend", mainRow);
+                tbody.insertAdjacentHTML("beforeend", detailsRow);
+            });
+        
+            updatePagination();
+            updateMasterCheckbox();
+        }
+        
+        
+        
+        function updatePagination() {
+            const pageButtons = document.getElementById('pageButtons');
+            pageButtons.innerHTML = '';
+        
+            const totalPages = entriesPerPage === 'all' ? 1 : Math.ceil(data.length / parseInt(entriesPerPage));
+        
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.classList.add('page-button');
+                if (i === currentPage) button.classList.add('active');
+                button.onclick = () => {
+                    currentPage = i;
+                    renderTable();
+                };
+                pageButtons.appendChild(button);
+            }
+        }
+        
+        function initializePagination() {
+            const entriesSelect = document.getElementById('entriesPerPage');
+            entriesSelect.addEventListener('change', (e) => {
+                entriesPerPage = e.target.value === 'all' ? 'all' : parseInt(e.target.value);
+                currentPage = 1;
+                renderTable();
+            });
+        
+            renderTable();
+        }
+        
+        function renderStars(id, rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += `<span class="star${i <= rating ? ' active' : ''}" onclick="rate(${id}, ${i})" data-rating="${i}">★</span>`;
+            }
+            return stars;
+        }
+        
+        function rate(id, rating) {
+            const item = data.find(item => item.id === id);
+            if (item) {
+                item.rating = rating;
+                const starsElement = document.getElementById(`stars-${id}`);
+                starsElement.innerHTML = renderStars(id, rating);
+            }
+        }
+        
+        function formatDate(dateString) {
+            return luxon.DateTime.fromISO(dateString).toLocaleString(luxon.DateTime.DATE_MED);
+        }
+        
+        function toggleDetails(id) {
+            const detailsRow = document.getElementById(`details-${id}`);
+            const isHidden = detailsRow.style.display === "none" || detailsRow.style.display === "";
+            detailsRow.style.display = isHidden ? "table-row" : "none";
+            
+            if (isHidden) {
+                setTimeout(() => {
+                    detailsRow.style.opacity = "1";
+                    detailsRow.style.transform = "translateY(0)";
+                }, 10);
+            } else {
+                detailsRow.style.opacity = "0";
+                detailsRow.style.transform = "translateY(-10px)";
+            }
+        }
+        
+        function toggleForm() {
+    const form = document.getElementById("addForm");
+    const btnToggle = document.querySelector(".btn-toggle-form:not(.btn-toggle-filter):not(.btn-toggle-bulk)");
+    
+    form.style.display = form.style.display === "none" || form.style.display === "" ? "block" : "none";
+    
+    if (form.style.display === "block") {
+        btnToggle.innerHTML = '<i class="fas fa-minus"></i> Hide Form';
+        btnToggle.classList.add("active-button");
+    } else {
+        btnToggle.innerHTML = '<i class="fas fa-plus"></i> Add New Entry';
+        btnToggle.classList.remove("active-button");
+    }
+}
+
+function toggleFilter() {
+    const filterForm = document.getElementById("filterForm");
+    const btnToggleFilter = document.querySelector(".btn-toggle-filter");
+    
+    filterForm.style.display = filterForm.style.display === "none" || filterForm.style.display === "" ? "block" : "none";
+    
+    if (filterForm.style.display === "block") {
+        btnToggleFilter.innerHTML = '<i class="fas fa-times"></i> Hide Filter';
+        btnToggleFilter.classList.add("active-button");
+    } else {
+        btnToggleFilter.innerHTML = '<i class="fas fa-filter"></i> Filter Data';
+        btnToggleFilter.classList.remove("active-button");
+    }
+}
+
+function closeActiveForm() {
+    if (activeForm) {
+        const form = document.getElementById(activeForm);
+        const button = document.querySelector(`.btn-toggle-form[onclick="toggle${activeForm.charAt(0).toUpperCase() + activeForm.slice(1)}()"]`);
+        
+        form.style.display = 'none';
+        button.classList.remove("active-button");
+        
+        if (activeForm === 'addForm') {
+            button.innerHTML = '<i class="fas fa-plus"></i> Add New Entry';
+        } else if (activeForm === 'filterForm') {
+            button.innerHTML = '<i class="fas fa-filter"></i> Filter Data';
+        } else if (activeForm === 'bulkActionForm') {
+            button.innerHTML = '<i class="fas fa-tasks"></i> Bulk Actions';
+        }
+        
+        activeForm = null;
+    }
+}
+
+function toggleSpecificForm(formId) {
+    console.log("Toggling form:", formId);
+    if (activeForm === formId) {
+        closeActiveForm();
+    } else {
+        closeActiveForm();
+        document.getElementById(formId).style.display = 'block';
+        activeForm = formId;
+    }
+}
+
+// Renamed from toggleForm to toggleAddForm to avoid conflict
+function toggleAddForm() {
+    const form = document.getElementById("addForm");
+    const btnToggle = document.querySelector(".btn-toggle-form:not(.btn-toggle-filter):not(.btn-toggle-bulk)");
+    
+    if (activeForm === 'addForm') {
+        // If the add form is already open, close it
+        form.style.display = "none";
+        btnToggle.innerHTML = '<i class="fas fa-plus"></i> Add New Entry';
+        btnToggle.classList.remove("active-button");
+        activeForm = null;
+    } else {
+        // If another form is open or no form is open, close it and open the add form
+        closeActiveForm();
+        form.style.display = "block";
+        btnToggle.innerHTML = '<i class="fas fa-minus"></i> Hide Form';
+        btnToggle.classList.add("active-button");
+        activeForm = 'addForm';
+    }
+}
+
+
+function toggleFilterForm() {
+    const filterForm = document.getElementById("filterForm");
+    const btnToggleFilter = document.querySelector(".btn-toggle-filter");
+    
+    if (activeForm === 'filterForm') {
+        // If the filter form is already open, close it
+        filterForm.style.display = "none";
+        btnToggleFilter.innerHTML = '<i class="fas fa-filter"></i> Filter Data';
+        btnToggleFilter.classList.remove("active-button");
+        activeForm = null;
+    } else {
+        // If another form is open or no form is open, close it and open the filter form
+        closeActiveForm();
+        filterForm.style.display = "block";
+        btnToggleFilter.innerHTML = '<i class="fas fa-times"></i> Hide Filter';
+        btnToggleFilter.classList.add("active-button");
+        activeForm = 'filterForm';
+    }
+}
+
+function toggleBulkActionForm() {
+    const bulkActionForm = document.getElementById("bulkActionForm");
+    const btnToggleBulk = document.querySelector(".btn-toggle-bulk");
+    
+    if (activeForm === 'bulkActionForm') {
+        // If the bulk action form is already open, close it
+        bulkActionForm.style.display = "none";
+        btnToggleBulk.innerHTML = '<i class="fas fa-tasks"></i> Bulk Actions';
+        btnToggleBulk.classList.remove("active-button");
+        activeForm = null;
+    } else {
+        // If another form is open or no form is open, close it and open the bulk action form
+        closeActiveForm();
+        bulkActionForm.style.display = "block";
+        btnToggleBulk.innerHTML = '<i class="fas fa-times"></i> Hide Bulk Actions';
+        btnToggleBulk.classList.add("active-button");
+        activeForm = 'bulkActionForm';
+    }
+}
+        
+        
+        function clearInputs() {
+            document.getElementById("nameInput").value = "";
+            document.getElementById("groupInput").value = "";
+            document.getElementById("mobileInput").value = "";
+            document.getElementById("emailInput").value = "";
+            document.getElementById("popInput").value = "";
+            document.getElementById("facilitatorInput").value = "";
+            document.getElementById("chantingInput").value = "";
+            document.getElementById("educationInput").value = "";
+            document.getElementById("addressInput").value = "";
+            document.getElementById("cityInput").value = "";
+            document.getElementById("blockNoInput").value = "";
+            document.getElementById("ageInput").value = "";
+            document.getElementById("servicesInput").value = "";
+            document.getElementById("dobInput").value = "";
+            document.getElementById("aboutInput").value = "";
+            document.getElementById("profilePicInput").value = "";
+        }
+        
+function populateDropdown(id, values, placeholder) {
+    const dropdown = document.getElementById(id);
+    dropdown.innerHTML = `<option value="">${placeholder}</option>`;
+    values.forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        dropdown.appendChild(option);
+    });
+}
+
+function initializeFilters() {
+    populateDropdowns();
+    renderTable();
+}
+
+
+function populateDropdown(id, values, placeholder) {
+    const dropdown = document.getElementById(id);
+    dropdown.innerHTML = `<option value="">${placeholder}</option>`;
+    values.forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        dropdown.appendChild(option);
+    });
+}
+
+// Add this event listener to handle repositioning on window resize
+window.addEventListener('resize', function() {
+    const panel = document.getElementById('notificationPanel');
+    if (panel.classList.contains('show') && window.innerWidth > 768) {
+        const icon = document.querySelector('.notification-icon');
+        const iconRect = icon.getBoundingClientRect();
+        panel.style.top = `${iconRect.bottom}px`;
+        panel.style.right = `${window.innerWidth - iconRect.right}px`;
+    }
+});
+function getTodaysTasks() {
+    const today = luxon.DateTime.now().toISODate();
+    const todaysTasks = [];
+    
+    data.forEach(item => {
+        if (item.followUpTasks) {
+            item.followUpTasks.forEach(task => {
+                if (task.dueDate === today) {
+                    todaysTasks.push({
+                        id: item.id,
+                        name: item.name,
+                        taskCreatedDate: task.createdDate,
+                        task: task.task
+                    });
+                }
+            });
+        }
+    });
+    
+    return todaysTasks;
+}
+
+function deleteTaskNotification(event) {
+    const itemId = parseInt(event.currentTarget.dataset.id);
+    const taskCreatedDate = event.currentTarget.dataset.created;
+    
+    if (confirm("Are you sure you want to delete this task?")) {
+        const item = data.find(i => i.id === itemId);
+        if (item) {
+            item.followUpTasks = item.followUpTasks.filter(t => t.createdDate !== taskCreatedDate);
+            updateNotifications();
+            renderFollowUpTasks(); // Re-render the main task table
+        }
+    }
+}
+// Modify the existing toggleNotificationPanel function in your HTML
+document.querySelector('.notification-icon').onclick = toggleNotificationPanel;
+    
+// Add this event listener at the end
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('followUpModal');
+    const span = document.getElementsByClassName("close")[0];
+    const form = document.getElementById('followUpForm');
+
+    span.onclick = closeModal;
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+    form.onsubmit = addFollowUpTask;
+});
+
+// Add these functions to your existing JavaScript
+
+function toggleFollowUpTasks() {
+    const container = document.getElementById('followUpTasksContainer');
+    const button = document.getElementById('toggleFollowUpTasks');
+    if (container.style.display === 'none') {
+        container.style.display = 'block';
+        button.innerHTML = '<i class="fas fa-tasks"></i> Hide Follow-up Tasks';
+        renderFollowUpTasks();
+    } else {
+        container.style.display = 'none';
+        button.innerHTML = '<i class="fas fa-tasks"></i> Show Follow-up Tasks';
+    }
+}
+
+function toggleEditMode(row, isEditing, currentDate) {
+    const taskDescription = row.querySelector('.task-description');
+    const taskDueDate = row.querySelector('.task-due-date');
+    const editBtn = row.querySelector('.edit-task');
+    const saveBtn = row.querySelector('.save-task');
+
+    taskDescription.contentEditable = isEditing;
+    editBtn.style.display = isEditing ? 'none' : 'inline-block';
+    saveBtn.style.display = isEditing ? 'inline-block' : 'none';
+
+    if (isEditing) {
+        taskDescription.focus();
+        
+        // Initialize Flatpickr for the due date
+        flatpickr(taskDueDate, {
+            defaultDate: currentDate,
+            dateFormat: "d-m-Y",
+            onClose: function(selectedDates, dateStr) {
+                taskDueDate.textContent = dateStr;
+            }
+        });
+    } else {
+        // Destroy Flatpickr instance when not editing
+        if (taskDueDate._flatpickr) {
+            taskDueDate._flatpickr.destroy();
+        }
+    }
+}
+
+
+function saveTask(itemId, taskCreatedDate, newDescription, newDueDate) {
+    const item = data.find(i => i.id === itemId);
+    if (item) {
+        const task = item.followUpTasks.find(t => t.createdDate === taskCreatedDate);
+        if (task) {
+            task.task = newDescription;
+            task.dueDate = newDueDate;
+            alert('Task updated successfully!');
+        }
+    }
+}
+
+function updateFollowUpTaskDate(itemId, taskCreatedDate, dateElement) {
+    const item = data.find(i => i.id === itemId);
+    if (item) {
+        const task = item.followUpTasks.find(t => t.createdDate === taskCreatedDate);
+        if (task) {
+            flatpickr(dateElement, {
+                defaultDate: task.dueDate,
+                dateFormat: "d-m-Y",
+                onClose: function(selectedDates, dateStr) {
+                    if (dateStr) {
+                        task.dueDate = dateStr;
+                        dateElement.textContent = dateStr;
+                    }
+                    // Destroy the Flatpickr instance after closing
+                    this.destroy();
+                }
+            }).open();
+        }
+    }
+}
+
+
+function updateSerialNumbers() {
+    const rows = document.querySelectorAll("#followUpTasksTable tbody tr");
+    rows.forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+    });
+}
+
+
+
+function renderTaskNotifications() {
+    const notificationList = document.getElementById('notificationList');
+    const todaysTasks = getTodaysTasks();
+    
+    if (todaysTasks.length === 0) {
+        notificationList.innerHTML = '<p>No tasks due today.</p>';
+        return;
+    }
+    
+    notificationList.innerHTML = '';
+    todaysTasks.forEach(task => {
+        const notificationItem = document.createElement('div');
+        notificationItem.className = 'notification-item';
+        notificationItem.innerHTML = `
+            <span class="notification-text">${task.name}: ${truncateText(task.task, 30)}</span>
+            <button class="delete-notification" data-id="${task.id}" data-created="${task.taskCreatedDate}" title="Delete Task">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        `;
+        notificationList.appendChild(notificationItem);
+    });
+    
+    // Add event listeners for delete buttons
+    document.querySelectorAll('.delete-notification').forEach(button => {
+        button.addEventListener('click', deleteTaskNotification);
+    });
+}
+
+function updateNotificationBadge() {
+    const badge = document.getElementById('notificationBadge');
+    const todaysTasks = getTodaysTasks();
+    const birthdayCount = getBirthdayCount(); // You'll need to implement this function
+    const totalCount = todaysTasks.length + birthdayCount;
+    
+    if (totalCount > 0) {
+        badge.textContent = totalCount;
+        badge.style.display = 'block';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+
+// Call the initialization function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+
+</script>
+
+        </body>
+</html>
