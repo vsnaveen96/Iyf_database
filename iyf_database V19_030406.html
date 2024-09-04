@@ -1636,8 +1636,6 @@ function initMap() {
             blockRectangles[blockNumber] = rectangle;
         }
     }
-
-    updateMapData();
 }
 
 function updateMapData() {
@@ -1659,18 +1657,7 @@ function updateMapData() {
         });
     });
     console.log("Block users after update:", blockUsers);
-
-    // Update block colors based on assigned users
-    for (let i = 1; i <= Object.keys(blockRectangles).length; i++) {
-        const rectangle = blockRectangles[i];
-        if (blockUsers[i] && blockUsers[i].length > 0) {
-            rectangle.setStyle({ color: "#00FF00", fillOpacity: 0.3 });
-        } else {
-            rectangle.setStyle({ color: "#FF0000", fillOpacity: 0.1 });
-        }
-    }
 }
-
 
 
 function displayBlockUsers(blockNumber) {
